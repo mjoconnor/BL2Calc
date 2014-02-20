@@ -22,7 +22,7 @@
                 <label>Consumes <input type="text" class="tb" ng-model="weaponStats.rounds" size="2"> ammo per shot</label>
                 <br/>
                 <label>Element:</label>
-                <select ng-model="weaponStats.ele" class="tb" ng-options="e.type for e in elementType"></select>
+                <select ng-model="weaponStats.ele" class="tb" ng-options="e as e.type for e in elementType"></select>
                 <br/>
                 <label>{{weaponStats.ele.name}} dmg/sec:</label>
                 <input type="text" class="tb" ng-model="weaponStats.eledmg" size="10">
@@ -31,9 +31,9 @@
                 <input type="text" class="tb" ng-model="weaponStats.eleper" size="4">
                 <hr>
                 <div class="stats">
-                    <p>SPM: {{spm(weaponStats.mag,weaponStats.rate,weaponStats.reload,weaponStats.fire,weaponStats.rounds) | number:2}}</p>
-                    <p>Sustained DPS: {{dps(weaponStats.dmg,weaponStats.dmgrnds,weaponStats.acc) | number:2}}</p>
-                    <p>{{weaponStats.ele.name}} DPS: {{eledmg(weaponStats.eledmg,weaponStats.ele,weaponStats.eleper,weaponStats.ele.dur) | number:2}}</p>
-                    <p>Total DPS: {{totaldps(weaponStats.eledmg,weaponStats.ele,weaponStats.eleper,weaponStats.ele.dur,weaponStats.dmg,weaponStats.dmgrnds,weaponStats.acc) | number:2}}</p>
+                    <p>SPM: {{spm(weaponStats) | number:2}}</p>
+                    <p>Sustained DPS: {{dps(weaponStats) | number:2}}</p>
+                    <p>{{weaponStats.eleType.name}} DPS: {{eledmg(weaponStats) | number:2}}</p>
+                    <p>Total DPS: {{totaldps(weaponStats) | number:2}}</p>     
                 </div>
             </div>

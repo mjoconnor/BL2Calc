@@ -2,15 +2,13 @@
 <html ng-app="app">
     <head>
         <link rel="stylesheet" type="text/css" href="style.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.8/angular.min.js"></script>
+        <script src="angular.min.js"></script>
         <script src="app.js"></script>
     </head>
     <body>
-        <div ng-controller="BL2Ctrl" class="cf">
+        <div ng-controller="BL2Ctrl" class="wc">
             <div class="cf">
-                <weaponblock info="weapons[0]"></weaponblock>
-                <weaponblock info="weapons[1]"></weaponblock>
-                <weaponblock info="weapons[2]"></weaponblock>
+                <div weaponblock  ng-repeat="i in weapons|limitTo:2" info="i"></div>
             </div>
         </div>
     </body>

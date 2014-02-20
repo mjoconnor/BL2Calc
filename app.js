@@ -1,22 +1,37 @@
 angular.module('app', [])
 
-.controller('BL2Ctrl', function($scope, $http) {
-
-	$scope.fireType = ["Semi-Auto","Automatic"];
-	$scope.elementType = [
+// Push this to an Angular provided dependency so the WeaponData factory can access it
+.value('ElementType',[
 	{type:"",dur:0},
 	{type:"Incendiary",name:"Burn",verb:"Ignite",dur:5},
 	{type:"Shock",name:"Electrocute",verb:"shock",dur:2},
 	{type:"Corrosive",name:"Corrosive",verb:"corrode",dur:8},
 	{type:"Slag",name:"Slag",verb:"Slag",dur:8}
-	];
+])
 
-	$http.get('weapon.json').success(function(data) {
+.factory('WeaponData', function($http, ElementType){
+	return $http.get('weapon.json')
+		// Here we update the elements before they ever leave the factory
+		.then(function(data){
+			data = data.data;
+			for(i=0, len=data.length; i< len; i++){
+				data[i].ele = ElementType[data[i].ele];
+			}
+			return data;
+		});
+})
+
+.controller('BL2Ctrl', function($scope,ElementType,WeaponData) {
+
+	WeaponData.then(function(data){
 		$scope.weapons = data;
-
 	});
+})
 
-	$scope.semiCap = function(fireRate, fireType) {
+.directive('weaponblock', function() {
+	fireType = ["Semi-Auto","Automatic"];
+
+	function semiCap(fireRate, fireType) {
 		var rate = fireRate;
 
 		if(fireType == "Semi-Auto") {
@@ -26,59 +41,60 @@ angular.module('app', [])
 		}
 
 		return rate;
-	};
+	}
 
-	$scope.adjAcc = function(acc) {
+	function adjAcc(acc) {
 		return acc/100;
-	};
+	}
 
-	$scope.spm = function(magSize,fireRate,reload,fireType,rounds) {
-		var mag = Math.ceil(magSize/rounds);
-		var fireCycle = mag/$scope.semiCap(fireRate,fireType);
-		var cyclesMinute = 60/(fireCycle+parseFloat(reload));
-		var fullCycles = Math.floor(cyclesMinute);
-		var remaining = (cyclesMinute-fullCycles)*(fireCycle+parseFloat(reload));
-		var partCycle = 0;
+	return {
+		restrict: 'AE',
+		replace: true,
+		controller: function($scope,ElementType){
+			$scope.elementType = ElementType;
+			$scope.fireType = fireType;
 
-		if(fireCycle < remaining) {
-			fullCycles++;
-		} else {
-			partCycle = Math.floor((remaining/fireCycle)*mag);
-		}
+			$scope.spm = function(weapon) {
+				var mag = Math.ceil(weapon.mag/weapon.rounds);
+				var fireCycle = mag/semiCap(weapon.rate,weapon.fire);
+				var cyclesMinute = 60/(fireCycle+parseFloat(weapon.reload));
+				var fullCycles = Math.floor(cyclesMinute);
+				var remaining = (cyclesMinute-fullCycles)*(fireCycle+parseFloat(weapon.reload));
+				var partCycle = 0;
 
-		var spm = (mag*fullCycles)+parseFloat(partCycle);
+				if(fireCycle < remaining) {
+					fullCycles++;
+				} else {
+					partCycle = Math.floor((remaining/fireCycle)*weapon.mag);
+				}
+
+				var spm = (weapon.mag*fullCycles)+parseFloat(partCycle);
 	
 
-		$scope.dps = function(dmg,dmgrnds,acc) {
-			return (Math.floor((spm*dmgrnds)*$scope.adjAcc(acc))*dmg)/60;
-		};
+				$scope.dps = function(weapon) {
+					return (Math.floor((spm*weapon.dmgrnds)*adjAcc(weapon.acc))*weapon.dmg)/60;
+				};
 
-		$scope.eledmg = function(elementdmg,element,elementper,elementdur) {
-			var dmg = ((elementdmg*elementdur)*(spm*$scope.adjAcc(elementper)))/60;
+				$scope.eledmg = function(weapon) {
+					var dmg = ((weapon.eledmg*weapon.ele.dur)*(spm*adjAcc(weapon.eleper)))/60;
 
-			if (dmg > elementdmg) {
-				return elementdmg;
-			} else {
-				return dmg;
-			}
-		};
+					if (dmg > weapon.eledmg) {
+						return weapon.eledmg;
+					} else {
+						return dmg;
+					}
+				};
 
-		return spm;
-	};
+				return spm;
+			};
 
-	$scope.totaldps = function(elementdmg,element,elementper,elementdur,dmg,dmgrnds,acc) {
-		return parseFloat($scope.eledmg(elementdmg,element,elementper,elementdur)) + $scope.dps(dmg,dmgrnds,acc);
-	};
-})
-
-.directive('weaponblock', function() {
-	return {
-		restrict: 'E',
-		replace: true,
-		controller:'BL2Ctrl',
+			$scope.totaldps = function(weapon) {
+				return parseFloat($scope.eledmg(weapon)) + $scope.dps(weapon);
+			};
+		},
 		scope: {
 			weaponStats: '=info'
 		},
-		templateUrl:'weaponblock.html',
+		templateUrl:'weaponblock.html'
 	};
 });

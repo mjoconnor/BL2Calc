@@ -10,11 +10,7 @@
 		"mag":6,
 		"fire":"Automatic",
 		"rounds":1,
-		"ele":{
-			"type":"Shock",
-			"name":"Electrocute",
-			"verb":"shock",
-			"dur":2},
+		"ele":2,
 		"eledmg":81.8,
 		"eleper":45
 	},
@@ -29,11 +25,7 @@
 		"mag":10,
 		"fire":"Automatic",
 		"rounds":1,
-		"ele":{
-			"type":"Corrosive",
-			"name":"Corrosive",
-			"verb":"corrode",
-			"dur":8},
+		"ele":3,
 		"eledmg":104.2,
 		"eleper":34.5
 	},
@@ -48,11 +40,7 @@
 		"mag":10,
 		"fire":"Automatic",
 		"rounds":1,
-		"ele":{
-			"type":"Corrosive",
-			"name":"Corrosive",
-			"verb":"corrode",
-			"dur":8},
+		"ele":3,
 		"eledmg":104.2,
 		"eleper":34.5
 	}
