@@ -68,7 +68,7 @@ angular.module('app', [])
 					partCycle = Math.floor((remaining/fireCycle)*weapon.mag);
 				}
 
-				var spm = (weapon.mag*fullCycles)+parseFloat(partCycle);
+				var spm = (mag*fullCycles)+parseFloat(partCycle);
 	
 
 				$scope.dps = function(weapon) {
