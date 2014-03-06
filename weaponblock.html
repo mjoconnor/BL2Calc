@@ -1,20 +1,21 @@
             <div class="block left">
+                <label>Name:</label>
                 <input type="text" class="tb" ng-model="weaponStats.name">
                 <br/>
                 <label>Damage:</label>
-                <input type="text" class="tb" ng-model="weaponStats.dmg">X<input type="text" class="tb"ng-model="weaponStats.dmgrnds" size="2">
+                <input type="text" class="tb" ng-model="weaponStats.dmg" size="15">X<input type="text" class="tb"ng-model="weaponStats.dmgrnds" size="2">
                 <br/>
                 <label>Accuracy:</label>
-                <input type="text" class="tb" ng-model="weaponStats.acc">
+                <input type="text" class="tb" ng-model="weaponStats.acc" size="5">
                 <br/>
                 <label>Fire Rate:</label>
-                <input type="text" class="tb" ng-model="weaponStats.rate">
+                <input type="text" class="tb" ng-model="weaponStats.rate" size="5">
                 <br/>
                 <label>Reload Speed:</label>
-                <input type="text" class="tb" ng-model="weaponStats.reload">
+                <input type="text" class="tb" ng-model="weaponStats.reload" size="5">
                 <br/>
                 <label>Magazine Size:</label>
-                <input type="text" class="tb" ng-model="weaponStats.mag">
+                <input type="text" class="tb" ng-model="weaponStats.mag" size="5">
                 <hr>
                 <label>Fire Type:</label>
                 <select ng-model="weaponStats.fire" class="tb" ng-options="f for f in fireType"></select>

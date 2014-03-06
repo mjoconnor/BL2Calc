@@ -16,7 +16,7 @@ hr {
 }
 
 .wc {
-	max-width: 676px;
+	max-width: 650px;
 	margin: 0 auto;
 }
 
@@ -42,6 +42,7 @@ hr {
 	padding: 10px;
 	margin: 10px;
 	float: left;
+	width: 275px;
 }
 
 .left {
